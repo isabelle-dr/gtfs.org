@@ -4,7 +4,7 @@
   
 # GTFS Schedule Reference
 
-**Revised May 9, 2022. See [Revision History](../revision-history) for more details.**
+**Revised Dec 8, 2022. See [Revision History](../revision-history) for more details.**
 
 This document defines the format and structure of the files that comprise a GTFS dataset.
 
@@ -23,6 +23,8 @@ This document defines the format and structure of the files that comprise a GTFS
     -   [calendar\_dates.txt](#calendar_datestxt)
     -   [fare\_attributes.txt](#fare_attributestxt)
     -   [fare\_rules.txt](#fare_rulestxt)
+    -   [timeframes.txt](#timeframestxt)    
+    -   [fare\_media.txt](#fare_mediatxt)
     -   [fare\_products.txt](#fare_productstxt) 
     -   [fare\_leg\_rules.txt](#fare_leg_rulestxt)
     -   [fare\_transfer\_rules.txt](#fare_transfer_rulestxt)
@@ -108,16 +110,18 @@ This specification defines the following files:
 |  [stops.txt](#stopstxt) | **Required** | Stops where vehicles pick up or drop off riders. Also defines stations and station entrances.  |
 |  [routes.txt](#routestxt) | **Required** | Transit routes. A route is a group of trips that are displayed to riders as a single service. |
 |  [trips.txt](#tripstxt)  | **Required** | Trips for each route. A trip is a sequence of two or more stops that occur during a specific time period. |
-|  [stop_times.txt](#stop_timestxt)  | **Required** | Times that a vehicle arrives at and departs from stops for each trip. |
+|  [stop_times.txt](#stop_timestxt) | **Required** | Times that a vehicle arrives at and departs from stops for each trip. |
 |  [calendar.txt](#calendartxt)  | **Conditionally Required** | Service dates specified using a weekly schedule with start and end dates. <br><br>Conditionally Required:<br> - **Required** unless all dates of service are defined in [calendar_dates.txt](#calendar_datestxt).<br> - Optional otherwise. |
 |  [calendar_dates.txt](#calendar_datestxt)  | **Conditionally Required** | Exceptions for the services defined in the [calendar.txt](#calendartxt). <br><br>Conditionally Required:<br> - **Required** if [calendar.txt](#calendartxt) is omitted. In which case [calendar_dates.txt](#calendar_datestxt) must contain all dates of service. <br> - Optional otherwise. |
 |  [fare_attributes.txt](#fare_attributestxt)  | Optional | Fare information for a transit agency's routes. |
-|  [fare_rules.txt](#fare_rulestxt)  | **Conditionally Required** | Rules to apply fares for itineraries.<br><br>Conditionally Required:<br>- **Required** if [fare_attributes.txt](#fare_attributestxt) is defined.<br>- **Forbidden** otherwise. |
-|  [fare_products.txt](#fare_productstxt)  | Optional | To describe the different types of tickets or fares that can be purchased by riders.<br><br>File [fare_products.txt](fare_productstxt) describes fare products that are not represented in [fare_attributes.txt](#fare_attributestxt) and [fare_rules.txt](#fare_rulestxt). As such, the use of [fare_products.txt](#fare_productstxt) is entirely separate from files [fare_attributes.txt](#fare_attributestxt) and [fare_rules.txt](#fare_rulestxt). |
+|  [fare_rules.txt](#fare_rulestxt)  | Optional | Rules to apply fares for itineraries. |
+|  [timeframes.txt](#timeframestxt)  | Optional | Date and time periods to use in fare rules for fares that depend on date and time factors. |
+|  [fare_media.txt](#fare_mediatxt)  | Optional | To describe the fare media that can be employed to use fare products. <br><br>File [fare_media.txt](#fare_mediatxt) describes concepts that are not represented in [fare_attributes.txt](#fare_attributestxt) and [fare_rules.txt](#fare_rulestxt). As such, the use of [fare_media.txt](#fare_mediatxt) is entirely separate from files [fare_attributes.txt](#fare_attributestxt) and [fare_rules.txt](#fare_rulestxt). |
+|  [fare_products.txt](#fare_productstxt)  | Optional | To describe the different types of tickets or fares that can be purchased by riders.<br><br>File [fare_products.txt](#fare_productstxt) describes fare products that are not represented in [fare_attributes.txt](#fare_attributestxt) and [fare_rules.txt](#fare_rulestxt). As such, the use of [fare_products.txt](#fare_productstxt) is entirely separate from files [fare_attributes.txt](#fare_attributestxt) and [fare_rules.txt](#fare_rulestxt). |
 |  [fare_leg_rules.txt](#fare_leg_rulestxt)  | Optional | Fare rules for individual legs of travel.<br><br>File [fare_leg_rules.txt](#fare_leg_rulestxt) provides a more detailed method for modeling fare structures. As such, the use of [fare_leg_rules.txt](#fare_leg_rulestxt) is entirely separate from files [fare_attributes.txt](#fare_attributestxt) and [fare_rules.txt](#fare_rulestxt). |
 |  [fare_transfer_rules.txt](#fare_transfer_rulestxt)  | Optional | Fare rules for transfers between legs of travel.<br><br>Along with [fare_leg_rules.txt](#fare_leg_rulestxt), file [fare_transfer_rules.txt](#fare_transfer_rulestxt) provides a more detailed method for modeling fare structures. As such, the use of [fare_transfer_rules.txt](#fare_transfer_rulestxt) is entirely separate from files [fare_attributes.txt](#fare_attributestxt) and [fare_rules.txt](#fare_rulestxt). |
-|  [areas.txt](areastxt) | Optional | Area grouping of locations. |
-|  [stop_areas.txt](stop_areastxt) | Optional | Rules to assign stops to areas. |
+|  [areas.txt](#areastxt) | Optional | Area grouping of locations. |
+|  [stop_areas.txt](#stop_areastxt) | Optional | Rules to assign stops to areas. |
 |  [shapes.txt](#shapestxt)  | Optional | Rules for mapping vehicle travel paths, sometimes referred to as route alignments. |
 |  [frequencies.txt](#frequenciestxt)  | Optional | Headway (time between trips) for headway-based service or a compressed representation of fixed-schedule service. |
 |  [transfers.txt](#transferstxt)  | Optional | Rules for making connections at transfer points between routes. |
@@ -143,7 +147,7 @@ The following example demonstrates how a field value would appear in a comma-del
 * Extra spaces between fields or field names should be removed. Many parsers consider the spaces to be part of the value, which may cause errors.
 * Each line must end with a CRLF or LF linebreak character.
 * Files should be encoded in UTF-8 to support all Unicode characters. Files that include the Unicode byte-order mark (BOM) character are acceptable. See [http://unicode.org/faq/utf_bom.html#BOM](http://unicode.org/faq/utf_bom.html#BOM) for more information on the BOM character and UTF-8.
-* All dataset files must be zipped together.
+* All dataset files must be zipped together. The files must reside at the root level directly, not in a subfolder.
 
 ## Field Definitions
 
@@ -311,7 +315,7 @@ File: **Optional**
 Primary key (`fare_id`)
 
 **Versions**<br>
-There are two modelling options for describing fares. GTFS-Fares V1 is the legacy option for describing minimal fare information. GTFS-Fares V2 is an updated method that allows for a more detailed account of an agency's fare structure. Both are allowed to be present in a dataset, but only one method should be used by a data consumer for a given dataset. It is recommended that GTFS-Fares V2 takes precedence over GTFS-Fares V1. <br><br>The files associated with GTFS-Fares V1 are: <br>- [fare_attributes.txt](#fare_attributestxt)<br>- [fare_rules.txt](#fare_rulestxt)<br><br>The files associated with GTFS-Fares V2 are: <br>- [fare_products.txt](#fare_productstxt)<br>- [fare_leg_rules.txt](#fare_leg_rulestxt)<br>- [fare_transfer_rules.txt](#fare_transfer_rulestxt)
+There are two modelling options for describing fares. GTFS-Fares V1 is the legacy option for describing minimal fare information. GTFS-Fares V2 is an updated method that allows for a more detailed account of an agency's fare structure. Both are allowed to be present in a dataset, but only one method should be used by a data consumer for a given dataset. It is recommended that GTFS-Fares V2 takes precedence over GTFS-Fares V1. <br><br>The files associated with GTFS-Fares V1 are: <br>- [fare_attributes.txt](#fare_attributestxt)<br>- [fare_rules.txt](#fare_rulestxt)<br><br>The files associated with GTFS-Fares V2 are: <br>- [fare_media.txt](#fare_mediatxt)<br>- [fare_products.txt](#fare_productstxt)<br>- [fare_leg_rules.txt](#fare_leg_rulestxt)<br>- [fare_transfer_rules.txt](#fare_transfer_rulestxt)
 
 <br>
 
@@ -327,7 +331,7 @@ There are two modelling options for describing fares. GTFS-Fares V1 is the legac
 
 ### fare_rules.txt
 
-File: **Conditionally Required**
+File: **Optional**
 
 Primary key (`*`)
 
@@ -337,7 +341,7 @@ The [fare_rules.txt](#farerulestxt) table specifies how fares in [fare_attribute
 * Fare depends on which zones the itinerary passes through.
 * Fare depends on which route the itinerary uses.
 
-For examples that demonstrate how to specify a fare structure with [fare_rules.txt](#farerulestxt) and [fare_attributes.txt](#fareattributestxt), see [https://code.google.com/p/googletransitdatafeed/wiki/FareExamples](https://code.google.com/p/googletransitdatafeed/wiki/FareExamples) in the GoogleTransitDataFeed open source project wiki.
+For examples that demonstrate how to specify a fare structure with [fare_rules.txt](#farerulestxt) and [fare_attributes.txt](#fareattributestxt), see [FareExamples](https://web.archive.org/web/20111207224351/https://code.google.com/p/googletransitdatafeed/wiki/FareExamples) in the GoogleTransitDataFeed open source project wiki.
 
 |  Field Name | Type | Presence | Description |
 |  ------ | ------ | ------ | ------ |
@@ -347,26 +351,63 @@ For examples that demonstrate how to specify a fare structure with [fare_rules.t
 |  `destination_id` | Foreign ID referencing `stops.zone_id` | Optional | Identifies a destination zone. If a fare class has multiple destination zones, create a record in [fare_rules.txt](#fare_rules.txt) for each `destination_id`.<hr>*Example: The `origin_id` and `destination_id` fields could be used together to specify that fare class "b" is valid for travel between zones 3 and 4, and for travel between zones 3 and 5, the [fare_rules.txt](#fare_rules.txt) file would contain these records for the fare class:* <br>`fare_id,...,origin_id,destination_id` <br>`b,...,3,4`<br> `b,...,3,5` |
 |  `contains_id` | Foreign ID referencing `stops.zone_id` | Optional | Identifies the zones that a rider will enter while using a given fare class. Used in some systems to calculate correct fare class. <hr>*Example: If fare class "c" is associated with all travel on the GRT route that passes through zones 5, 6, and 7 the [fare_rules.txt](#fare_rules.txt) would contain these records:* <br> `fare_id,route_id,...,contains_id` <br>  `c,GRT,...,5` <br>`c,GRT,...,6` <br>`c,GRT,...,7` <br> *Because all `contains_id` zones must be matched for the fare to apply, an itinerary that passes through zones 5 and 6 but not zone 7 would not have fare class "c". For more detail, see [https://code.google.com/p/googletransitdatafeed/wiki/FareExamples](https://code.google.com/p/googletransitdatafeed/wiki/FareExamples) in the GoogleTransitDataFeed project wiki.* |
 
+### timeframes.txt
+
+File: **Optional**
+
+Primary key (*)
+
+Used to describe fares that can vary based on the time of day, the day of the week, or a particular day in the year. Timeframes can be associated with fare products in `fare_leg_rules.txt`. <br>
+There must not be overlapping time intervals for the same `timeframe_group_id` and `service_id` values.
+
+|  Field Name | Type | Presence | Description |
+|  ------ | ------ | ------ | ------ |
+|  `timeframe_group_id` | ID | **Required** | Identifies a timeframe or set of timeframes. |
+|  `start_time` | Time | **Conditionally Required** |  Defines the beginning of a timeframe. The interval includes the start time.<br> Values greater than `24:00:00` are forbidden. An empty value in `start_time` is considered `00:00:00`. <br><br> Conditionally Required:<br> - **Required** if `timeframes.end_time` is defined.<br> - **Forbidden** otherwise |
+|  `end_time` | Time | **Conditionally Required** |  Defines the end of a timeframe. The interval does not include the end time.<br> Values greater than `24:00:00` are forbidden. An empty value in `end_time` is considered `24:00:00`. <br><br> Conditionally Required:<br> - **Required** if `timeframes.start_time` is defined.<br> - **Forbidden** otherwise |
+| `service_id` | Foreign ID referencing `calendar.service_id` or `calendar_dates.service_id` | **Required** | Identifies a set of dates that a timeframe is in effect. |
+
+#### Timeframe Local Time Semantics
+- When evaluating a fare event’s time against `timeframes.txt`, the event time is computed in local time using the local timezone, as determined by the `stop_timezone`, if specified, of the stop or parent station for the fare event. If not specified, the feed’s agency timezone should be used instead.
+- The “current day” is the current date of the fare event’s time, computed relative to the local timezone.  The “current day” may be different from the service day of a fare leg’s trip, especially for trips that extend past midnight.
+- The “time-of-day” for the fare event is computed relative to “current day” using GTFS Time field-type semantics.
+
+### fare_media.txt
+
+File: **Optional** 
+
+Primary Key (`fare_media_id`)
+
+To describe the different fare media that can be employed to use fare products. Fare media are physical or virtual holders used for the representation and/or validation of a fare product.
+
+|  Field Name | Type | Presence | Description |
+|  ------ | ------ | ------ | ------ |
+|  `fare_media_id` | Unique ID | **Required** | Identifies a fare media. |
+|  `fare_media_name` | Text | Optional | Name of the fare media.<br><br>For fare media which are transit cards (`fare_media_type =2`) or mobile apps (`fare_media_type =4`), the `fare_media_name` should be included and should match the rider-facing name used by the organizations delivering them. |
+|  `fare_media_type` | Enum | **Required** | The type of fare media. Valid options are:<br><br>`0` - None.  Used when there is no fare media involved in purchasing or validating a fare product, such as paying cash to a driver or conductor with no physical ticket provided.<br>`2` - Physical transit card that has stored tickets, passes or monetary value.<br>`3` - cEMV (contactless Europay, Mastercard and Visa) as an open-loop token container for account-based ticketing.<br>`4` - Mobile app that have stored virtual transit cards, tickets, passes, or monetary value.|
+
 ### fare_products.txt
 
 File: **Optional**
 
-Primary Key (`fare_product_id`)
+Primary Key (`fare_product_id`, `fare_media_id`)
 
 To describe the different types of tickets or fares that can be purchased by riders.
 
 |  Field Name | Type | Presence | Description |
 |  ------ | ------ | ------ | ------ |
-| `fare_product_id` |  ID | **Required** | Identifies a fare product. |
+| `fare_product_id` | ID | **Required** | Identifies a fare product. |
 | `fare_product_name` | Text | Optional | The name of the fare product as displayed to riders. |
+|  `fare_media_id` | Foreign ID referencing `fare_media.fare_media_id` | Optional |  Identifies a fare media that can be employed to use the fare product during the trip. When `fare_media_id` is empty, it is considered that the fare media is unknown.|
 | `amount` | Currency amount | **Required** | The cost of the fare product. May be negative to represent transfer discounts. May be zero to represent a fare product that is free.|
 | `currency` | Currency code | **Required** | The currency of the cost of the fare product. |
+
 
 ### fare_leg_rules.txt
 
 File: **Optional**
 
-Primary Key (`network_id, from_area_id, to_area_id, fare_product_id`)
+Primary Key (`network_id, from_area_id, to_area_id, from_timeframe_group_id, to_timeframe_group_id, fare_product_id`)
 
 Fare rules for individual legs of travel.
 
@@ -377,14 +418,18 @@ To process the cost of a leg:
 1. The file `fare_leg_rules.txt` must be filtered by the fields that define the characteristics of travel, these fields are:
     - `fare_leg_rules.network_id`
     - `fare_leg_rules.from_area_id`
-    - `fare_leg_rules.to_area_id`<br/>
+    - `fare_leg_rules.to_area_id`
+    - `fare_leg_rules.from_timeframe_group_id`
+    - `fare_leg_rules.to_timeframe_group_id`<br/>    
 <br/>
 
 2. If the leg exactly matches a record in `fare_leg_rules.txt` based on the characteristics of travel, that record must be processed to determine the cost of the leg.
+<br/>
+
 3. If no exact matches are found, then empty entries in `fare_leg_rules.network_id`, `fare_leg_rules.from_area_id`, and `fare_leg_rules.to_area_id` must be checked to process the cost of the leg:
     - An empty entry in `fare_leg_rules.network_id` corresponds to all networks defined in `routes.txt` excluding the ones listed under `fare_leg_rules.network_id`
     - An empty entry in `fare_leg_rules.from_area_id` corresponds to all areas defined in `areas.area_id` excluding the ones listed under `fare_leg_rules.from_area_id`
-    - An empty entry in `fare_leg_rules.to_area_id` corresponds to all areas defined in `areas.area_id` excluding the ones listed under `fare_leg_rules.to_area_id`<br/>
+    - An empty entry in `fare_leg_rules.to_area_id` corresponds to all areas defined in `areas.area_id` excluding the ones listed under `fare_leg_rules.to_area_id`
 <br/>
 
 4. If the leg does not match any of the rules described above, then the fare is unknown.
@@ -397,6 +442,8 @@ To process the cost of a leg:
 | `network_id` | Foreign ID referencing `routes.network_id` | Optional | Identifies a route network that applies for the fare leg rule.<br><br>If there are no matching `fare_leg_rules.network_id` values to the `network_id` being filtered, empty `fare_leg_rules.network_id` will be matched by default.<br><br> An empty entry in `fare_leg_rules.network_id` corresponds to all networks defined in `routes.txt` excluding the ones listed under `fare_leg_rules.network_id` |
 | `from_area_id` | Foreign ID referencing `areas.area_id` | Optional | Identifies a departure area.<br><br>If there are no matching `fare_leg_rules.from_area_id` values to the `area_id` being filtered, empty `fare_leg_rules.from_area_id` will be matched by default. <br><br>An empty entry in `fare_leg_rules.from_area_id` corresponds to all areas defined in `areas.area_id` excluding the ones listed under `fare_leg_rules.from_area_id` |
 | `to_area_id` | Foreign ID referencing `areas.area_id` | Optional | Identifies an arrival area.<br><br>If there are no matching `fare_leg_rules.to_area_id` values to the `area_id` being filtered, empty `fare_leg_rules.to_area_id` will be matched by default.<br><br> An empty entry in `fare_leg_rules.to_area_id` corresponds to all areas defined in `areas.area_id` excluding the ones listed under `fare_leg_rules.to_area_id` |
+|  `from_timeframe_group_id` | Foreign ID referencing `timeframes.timeframe_group_id` | Optional |  Defines the timeframe for the fare validation event at the start of the fare leg.<br><br>The “start time” of the fare leg is the time at which the event is scheduled to occur.  For example, the time could be the scheduled departure time of a bus at the start of a fare leg where the rider boards and validates their fare. For the rule matching semantics below, the start time is computed in local time, as determined by [Local Time Semantics](#localtimesemantics) of [timeframes.txt](#timeframestxt).  The stop or station of the fare leg’s departure event should be used for timezone resolution, where appropriate.<br><br>For a fare leg rule that specifies a `from_timeframe_group_id`, that rule will match a particular leg if there exists at least one record in `timeframes.txt` where all of the following conditions are true<br>- The value of `timeframe_group_id` is equal to the `from_timeframe_group_id` value.<br>- The set of days identified by the record’s `service_id` contains the “current day” of the fare leg’s start time.<br>- The “time-of-day” of the fare leg's start time is greater than or equal to the record’s `timeframes.start_time` value and less than the `timeframes.end_time` value.<br><br>An empty `fare_leg_rules.from_timeframe_group_id` indicates that the start time of the leg does not affect the matching of this rule. |
+|  `to_timeframe_group_id` |  Foreign ID referencing `timeframes.timeframe_group_id` | Optional |  Defines the timeframe for the fare validation event at the end of the fare leg.<br><br>The “end time” of the fare leg is the time at which the event is scheduled to occur.  For example, the time could be the scheduled arrival time of a bus at the end of a fare leg where the rider gets off and validates their fare.  For the rule matching semantics below, the end time is computed in local time, as determined by [Local Time Semantics](#localtimesemantics) of [timeframes.txt](#timeframestxt).  The stop or station of the fare leg’s arrival event should be used for timezone resolution, where appropriate.<br><br>For a fare leg rule that specifies a `to_timeframe_group_id`, that rule will match a particular leg if there exists at least one record in `timeframes.txt` where all of the following conditions are true<br>- The value of `timeframe_group_id` is equal to the `to_timeframe_group_id` value.<br>- The set of days identified by the record’s `service_id` contains the “current day” of the fare leg’s end time.<br>- The “time-of-day” of the fare leg's end time is greater than or equal to the record’s `timeframes.start_time` value and less than the `timeframes.end_time` value.<br><br>An empty `fare_leg_rules.to_timeframe_group_id` indicates that the end time of the leg does not affect the matching of this rule. |
 | `fare_product_id` | Foreign ID referencing `fare_products.fare_product_id` | **Required** | The fare product required to travel the leg. |
 
 ### fare_transfer_rules.txt
