@@ -47,7 +47,6 @@ This section shows practices organized by file and field, aligning with the [GTF
 
 | Field Name | Recommendation |
 | --- | --- |
-| `agency_id` | Should be included, even if there is only one agency in the feed. (See also recommendation to include `agency_id` in [`routes.txt`](#routestxt) and [`fare_attributes.txt`](#fare_attributestxt)) |
 | `agency_phone` | Should be included unless no such customer service phone exists. |
 | `agency_email` | Should be included unless no such customer service email exists. |
 | `agency_fare_url` | Should be included unless the agency is fully fare-free. |
@@ -74,7 +73,6 @@ __Examples:__
 
 | Field Name | Recommendation |
 | --- | --- |
-| `route_short_name` | Include `route_short_name` if there is a brief service designation. This should be the commonly-known passenger name of the service, no longer than 12 characters. |
 | `route_long_name` | The definition from Specification reference: <q>This name is generally more descriptive than the <code>route_short_name</code> and will often include the route's destination or stop. At least one of <code>route_short_name</code> or <code>route_long_name</code> must be specified, or potentially both if appropriate. If the route does not have a long name, please specify a <code>route_short_name</code> and use an empty string as the value for this field.</q><br>Examples of types of long names are below:<table class='example'><thead><tr><th colspan='3'>Primary Travel Path or Corridor</th></tr><tr><th>Route Name</th><th>Form</th><th>Agency</th></tr></thead><tbody><tr><td><a href='https://www.sfmta.com/getting-around/transit/routes-stops/n-judah'>“N”/“Judah”</a></td><td><code>route_short_name</code>/<br><code>route_long_name</code></td><td><a href='https://www.sfmta.com/'>Muni</a>, in San Francisco</td></tr><tr><td><a href='https://trimet.org/schedules/r006.htm'>“6“/“ML King Jr Blvd“</a></td><td><code>route_short_name</code>/<br><code>route_long_name</code></td><td><a href='https://trimet.org/'>TriMet</a>, in Portland, Or.</td></tr><tr><td><a href='http://www.ratp.fr/informer/pdf/orienter/f_plan.php?nompdf=m6'>“6”/“Nation - Étoile”</a></td><td><code>route_short_name</code>/<br><code>route_long_name</code></td><td><a href='http://www.ratp.fr/'>RATP</a>, in Paris France.</td></tr><tr><td><a href='http://www.bvg.de/images/content/linienverlaeufe/LinienverlaufU2.pdf'>“U2”-“Pankow – Ruhleben”</a></td><td><code>route_short_name</code>-<br><code>route_long_name</code></td><td><a href='http://www.bvg.de/'>BVG</a>, in Berlin, Germany</td></tr></tbody></table><table class='example'><thead><tr><th>Description of the Service</th></tr></thead><tbody><tr><td><a href='https://128bc.org/schedules/rev-bus-hartwell-area/'>“Hartwell Area Shuttle“</a></td></tr></tbody></table>        
 | | `route_long_name` should not contain the `route_short_name`. |
 | | Include the full designation including a service identity when populating `route_long_name`. Examples:<table class='example'><thead><tr><th>Service Identity</th><th>Recommendation</th><th>Examples</th></tr></thead><tbody><tr><td>"MAX Light Rail"<br>TriMet, in Portland, Oregon</td><td>The <code>route_long_name</code> should include the brand (MAX) and the specific route designation</td><td>"MAX Red Line" "MAX Blue Line"</td></tr><tr><td>"Rapid Ride"<br>ABQ Ride, in Albuquerque, New Mexico</td><td>The <code>route_long_name</code> should include the brand (Rapid Ride) and the specific route designation</td><td>"Rapid Ride Red Line"<br>"Rapid Ride Blue Line"</td></tr></tbody></table>
@@ -94,6 +92,7 @@ __Examples:__
 | | <table class="example"><thead><tr><th>Route Description</th><th>Recommendation</th></tr></thead><tbody><tr><td>2A. Destination-only</td><td>Provide the terminus destination. e.g. "Transit Center", “Portland City Center”, or “Jantzen Beach”> </td></tr><tr><td>2B. Destinations with waypoints</td><td>&lt;destination&gt; via &lt;waypoint&gt; “Highgate via Charing Cross”. If waypoint(s) are removed from the headsign show to passengers after the vehicle passes those waypoints, use <code>stop_times.stop_headsign</code> to set an updated headsign.> </td></tr><tr><td>2C. Regional placename with local stops</td><td>If there will be multiple stops inside the city or borough of destination, use <code>stop_times.stop_headsign</code> once reaching the destination city.> </td></tr><tr><td>2D. Direction-only</td><td>Indicate using terms such as “Northbound”, “Inbound”, “Clockwise,” or similar directions.></td></tr><tr><td>2E. Direction with destination</td><td>&lt;direction&gt; to &lt;terminus name&gt; e.g. “Southbound to San Jose”></td></tr><tr><td>2F. Direction with destination and waypoints</td><td>&lt;direction&gt; via &lt;waypoint&gt; to &lt;destination&gt; (“Northbound via Charing Cross to Highgate”).></td></tr></tbody></table> |
 | | Do not begin a headsign with the words “To” or “Towards”. |
 | `direction_id` | Use values 0 and 1 consistently throughout the dataset. i.e.<ul><li>If 1 = Outbound on the Red route, then 1 = Outbound on the Green route</li><li>If 1 = Northbound on Route X, then 1 = Northbound on Route Y</li><li>If 1 = clockwise on Route X then 1 = clockwise on Route Y</li></ul> |
+| `bikes_allowed` | For ferry trips, be explicit about bikes being allowed (or not), as avoiding ferry trips due to missing data usually leads to big detours. |
 
 ### stop_times.txt
 
@@ -107,7 +106,6 @@ Loop routes: Loop routes require special `stop_times` considerations. (See: [Loo
 | `stop_headsign` | In general, headsign values should also correspond to signs in the stations.<br><br>In the cases below, “Southbound” would mislead customers because it is not used in the station signs.
 | | <table class="example"><thead><tr><th colspan="2">In NYC, for the 2 going Southbound:</th></tr><tr><th>For <code>stop_times.txt</code> rows:</th><th>Use <code>stop_headsign</code> value:</th></tr></thead><tbody><tr><td>Until Manhattan is Reached</td><td><code>Manhattan & Brooklyn</code></td></tr><tr><td>Until Downtown is Reached</td><td><code>Downtown & Brooklyn</code></td></tr><tr><td>Until Brooklyn is Reached</td><td><code>Brooklyn</code></td></tr><tr><td>Once Brooklyn is Reached</td><td><code>Brooklyn (New Lots Av)</code></td></tr></tbody></table> |
 | | <table class="example"><thead><tr><th colspan="2">In Boston, for the Red Line going Southbound, for the Braintree branch:</th></tr><tr><th>For <code>stop_times.txt</code> rows:</th><th>Use <code>stop_headsign</code> value:</th></tr></thead><tbody><tr><td>Until Downtown is Reached</td><td><code>Inbound to Braintree</code></td></tr><tr><td>Once Downtown is Reached</td><td><code>Braintree</code></td></tr><tr><td>After Downtown</td><td><code>Outbound to Braintree</code></td>  </tr></tbody></table> |
-| `shape_dist_traveled` | `shape_dist_traveled` must be provided for routes that have looping or inlining (the vehicle crosses or travels over the same portion of alignment in one trip). See the [`shapes.shape_dist_traveled`](#shapestxt) recommendation. |
 
 ### calendar.txt
 
@@ -125,7 +123,6 @@ Loop routes: Loop routes require special `stop_times` considerations. (See: [Loo
 
 | Field Name | Recommendation |
 | --- | --- |
-| All Fields | `agency_id` should be included in `fare_attributes.txt` if it the field is included in `agency.txt`. |
 | | If a fare system cannot be accurately modeled, avoid further confusion and leave it blank. |
 | | Include fares (`fare_attributes.txt` and `fare_rules.txt`) and model them as accurately as possible. In edge cases where fares cannot be accurately modeled, the fare should be represented as more expensive rather than less expensive so customers will not attempt to board with insufficient fare. If the vast majority of fares cannot be modeled correctly, do not include fare information in the feed. |
 
@@ -142,8 +139,7 @@ Loop routes: Loop routes require special `stop_times` considerations. (See: [Loo
 | --- | --- |
 | All Fields | Ideally, for alignments that are shared (i.e. in a case where Routes 1 and 2 operate on the same segment of roadway or track) then the shared portion of alignment should match exactly. This helps to facilitate high-quality transit cartography. <!-- (77) -->
 | | Alignments should follow the centerline of the right of way on which the vehicle travels. This could be either the centerline of the street if there are no designated lanes, or the centerline of the side of the roadway that travels in the direction the vehicle moves. <br><br>Alignments should not “jag” to a curb stop, platform, or boarding location. |
-| `shape_dist_traveled` | Must be provided in both `shapes.txt` and `stop_times.txt` if an alignment includes looping or inlining (the vehicle crosses or travels over the same portion of alignment in one trip). <img src="https://raw.githubusercontent.com/MobilityData/GTFS_Schedule_Best-Practices/master/en/inlining.svg" width=200px style="display: block; margin-left: auto; margin-right: auto;"><br>If a vehicle retraces or crosses the route alignment at points in the course of a trip, <code>shape_dist_traveled</code> is important to clarify how portions of the points in <code>shapes.txt</code> line up correspond with records in <code>stop_times.txt</code>. |
-| | The `shape_dist_traveled` field allows the agency to specify exactly how the stops in the `stop_times.txt` file fit into their respective shape. A common value to use for the `shape_dist_traveled` field is the distance from the beginning of the shape as traveled by the vehicle (think something like an odometer reading). <li>Route alignments (in `shapes.txt`) should be within 100 meters of stop locations which a trip serves.</li><li>Simplify alignments so that <code>shapes.txt</code> does not contain extraneous points (i.e. remove extra points on straight-line segments; see discussion of line simplification problem).</li>
+| `shape_dist_traveled` | The `shape_dist_traveled` field allows the agency to specify exactly how the stops in the `stop_times.txt` file fit into their respective shape. A common value to use for the `shape_dist_traveled` field is the distance from the beginning of the shape as traveled by the vehicle (think something like an odometer reading). <li>Route alignments (in `shapes.txt`) should be within 100 meters of stop locations which a trip serves.</li><li>Simplify alignments so that <code>shapes.txt</code> does not contain extraneous points (i.e. remove extra points on straight-line segments; see discussion of line simplification problem).</li>
 
 ### frequencies.txt
 
@@ -164,16 +160,6 @@ Loop routes: Loop routes require special `stop_times` considerations. (See: [Loo
 | | <q>3: Transfers are not possible between routes at this location.</q><br>Specify this value if transfers are not possible because of physical barriers, or if they are made unsafe or complicated by difficult road crossings or gaps in the pedestrian network. |
 | | If in-seat (block) transfers are allowed between trips, then the last stop of the arriving trip must be the same as the first stop of the departing trip. |
 
-
-### feed_info.txt
-
-`feed_info.txt` should be included, with all fields below.
-
-| Field Name | Recommendation |
-| --- | --- |
-| `feed_start_date` & `feed_end_date` | Should be included |
-| `feed_version` | Should be included |
-| `feed_contact_email` & `feed_contact_url` | Provide at least one |
 
 ## Practice Recommendations Organized by Case
 
@@ -273,13 +259,12 @@ Working Group members voted on each Best Practice. Most Best Practices were appr
 
 ### Why not just change the GTFS reference?
 
-Good question! The process of examining the Specification, data usage and needs did indeed trigger some changes to the Specification (see [closed pull requests in GitHub](https://github.com/google/transit/pulls?q=is%3Apr+is%3Aclosed)). Specification reference amendments are subject to a higher bar of scrutiny and comment than the Best Practices. However, there was still need to agree on a clear set of Best Practice recommendations.
+Good question! The process of examining the Specification, data usage and needs did indeed trigger some changes to the Specification (see [closed pull requests in GitHub](https://github.com/google/transit/pulls?q=is%3Apr+is%3Aclosed)). 
+Specification reference amendments are subject to a higher bar of scrutiny and comment than the Best Practices. Certain Best Practices are being merged into the spec based on their level of adoption and community consensus. Eventually, all GTFS Best Practices could become part of the core GTFS Reference.
 
-The working group anticipates that some GTFS Best Practices will eventually become part of the core GTFS reference.
+### How to check for conformance with these Best Practices?
 
-### Do GTFS validator tools check for conformance with these Best Practices?
-
-No validator tool currently checks for conformance with all Best Practices. Various validator tools check for conformance with some of these best practices. For a list of GTFS validator tools, see [GTFS Validators](https://github.com/CUTR-at-USF/awesome-transit#gtfs-validators). If you write a GTFS validator tool that references these Best Practices, please email [specifications@mobilitydata.org](mailto:specifications@mobilitydata.org).
+The Canonical GTFS Schedule Validator checks for compliance against these Best Practices. You can find more about this validation tool on the [validate page](https://gtfs.org/schedule/validate/).
 
 ### I represent a transit agency. What steps can I take so that our software service providers and vendors follow these Best Practices?
 
@@ -288,10 +273,6 @@ Refer your vendor or software service provider to these Best Practices. We recom
 ### What should I do if I notice a GTFS data feed does not conform to these Best Practices?
 
 Identify the contact for the feed, using the [proposed feed\_contact\_email or feed\_contact\_url](https://github.com/google/transit/pull/31/files) fields in *feed_info.txt* if they exist, or looking up contact information on the transit agency or feed producer website. When communicating the issue to the feed producer, link to the specific GTFS Best Practice under discussion. (See ["Linking to this Document"](#linking-to-this-document)).
-
-### I would like to propose a modification/addition to the Best Practices. How do I do this?
-
-Email [specifications@mobilitydata.org](mailto:specifications@mobilitydata.org) or open an issue or pull request in the [GitHub GTFS Best Practices repo](https://github.com/rocky-mountain-institute/gtfs-best-practices).
 
 ### How do I get involved?
 
@@ -310,7 +291,7 @@ The objectives of maintaining GTFS Best Practices is to:
 
 ### How to propose or amend published GTFS Best Practices
 
-GTFS applications and practice evolve, and so this document may need to be amended from time to time. To propose an amendment to this document, open a pull request [in the GTFS Best Practices GitHub repository](https://github.com/MobilityData/gtfs-best-practices) and advocate for the change. You can slo email any comments to [specifications@mobilitydata.org](mailto:specifications@mobilitydata.org).
+The Best Practices are in the process of being merged into the spec. If you'd like to suggest a new best practice, please go to the [GTFS Reference GitHub repository](https://github.com/google/transit/) to open an issue or create a PR, or contact [specifications@mobilitydata.org](mailto:specifications@mobilitydata.org).
 
 ### Linking to This Document
 
