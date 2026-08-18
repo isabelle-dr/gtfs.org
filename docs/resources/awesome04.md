@@ -1,19 +1,27 @@
-<a class="pencil-link" href="https://github.com/CUTR-at-USF/awesome-transit/edit/master/README.md" title="Edit this page" target="_blank">
-    <svg class="pencil" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"></path></svg>
-  </a>
-  
-# Other Resources
+# Resources
 
-On-line courses, blog posts, and reports related to open transit data.
+## Community
 
-## On-line courses
+Places to ask questions and find other community resources.
 
-- [World Bank - "Intro. to GTFS" online course](https://olc.worldbank.org/content/introduction-general-transit-feed-specification-gtfs-and-informal-transit-system-mapping) - A free, online, self-paced course for learning about GTFS and GTFS-realtime.
-- [Open Transit Data Toolkit](http://transitdatatoolkit.com/) - A series of lessons to help people utilize open transit data.
-- [MBTA GTFS Onboarding](https://mybinder.org/v2/gh/mbta/gtfs_onboarding/main?urlpath=lab/tree/GTFS_Onboarding.ipynb) - An interactive tutorial created by MBTA for GTFS static. A [stand-alone Docker image](https://github.com/mbta/gtfs_onboarding) is available on GitHub as well as a [hosted/no-install version](https://mybinder.org/v2/gh/mbta/gtfs_onboarding/main?urlpath=lab/tree/GTFS_Onboarding.ipynb) of the Jupyter notebook.
-- [Planetizen "Building a Transit Map Web App" course](https://courses.planetizen.com/course/building-transit-map-app) - A video tutorial on setting up your own web-based mapping application, with no coding experience required. 
-- [GTFS-books](https://github.com/MobilityData/GTFS-books) - Comprehensive guides to GTFS and GTFS Realtime. These books were written by [Quentin Zervaas](https://github.com/HendX), and have been donated to [MobilityData](https://mobilitydata.org/) and made open access.
+- [MobilityData Slack chat](https://share.mobilitydata.org/slack) - Chatroom that includes channels #gtfs, #gtfs-validators #mobility-database  #gtfs-realtime #gtfs_best-practices #gtfs-pathways #gtfs-fares #gtfs-flex #trb-transit-data.
+- [Transit Developers mailing list](https://groups.google.com/forum/#!forum/transit-developers)
+- [OpenTripPlanner](https://github.com/opentripplanner/OpenTripPlanner) Community
+    - [OpenTripPlanner User mailing list](https://groups.google.com/forum/#!forum/opentripplanner-users)
+    - [OpenTripPlanner Developers mailing list](https://groups.google.com/forum/#!forum/opentripplanner-dev)
+- OneBusAway
+    - [OneBusAway Developers mailing list](http://groups.google.com/group/onebusaway-developers)
+    - [OneBusAway API mailing list](http://groups.google.com/group/onebusaway-api)
 
+## Local and regional groups
+- [Transit Techies NYC](https://transittechies.nyc/) - NYC-based in-person/online hybrid meetup. [Speaker list](https://transittechies.nyc/past) includes many contributors to this repo.
+- [German Open Transport Meetup](https://github.com/transportkollektiv/meetup/wiki) - [Biweekly](https://hackmd.okfn.de/opentransportmeetup#) online meetup of the German-speaking open transport community.
+- [German Open Transport Data Quality Meetup](https://github.com/transportkollektiv/meetup/wiki) - Bimonthly online meetup of the German-speaking open transport community dedicated to data quality.
+- [Open Train Community](https://github.com/hasadna/OpenTrainCommunity) - Opentrain repository for community data analysis of Israel Railways train delay data.
+
+## Research and Commentary
+
+Blog posts, and reports related to open transit data.
 
 ## Blog posts
 
@@ -28,7 +36,7 @@ On-line courses, blog posts, and reports related to open transit data.
 ## Academic papers
 
 - [Tang et al. - "Ridership effects of real-time bus information system: A case study in the City of Chicago"](https://www.sciencedirect.com/science/article/pii/S0968090X12000022) - Experiment in Chicago, IL showed modest increase in ridership when riders had access to real-time info via text message or email.
-- [Kay et al. - "When(ish) is my bus? User-centered Visualizations of Uncertainty in Everyday, Mobile Predictive Systems"](http://faculty.washington.edu/jhullman/busUncertaintyVis.pdf) - Paper attempts to answr the question of "how do we communicate uncertainty in transit predictions?" Explains the problem, existing solutions and designs a [better interface for letting users know when to arrive at the bus stop](https://github.com/mjskay/when-ish-is-my-bus/blob/master/quantile-dotplots.md#quantile-dotplots).
+- [Kay et al. - "When(ish) is my bus? User-centered Visualizations of Uncertainty in Everyday, Mobile Predictive Systems"](https://www.mjskay.com/papers/chi_2016_uncertain_bus.pdf) - Paper attempts to answr the question of "how do we communicate uncertainty in transit predictions?" Explains the problem, existing solutions and designs a [better interface for letting users know when to arrive at the bus stop](https://github.com/mjskay/when-ish-is-my-bus/blob/master/quantile-dotplots.md#quantile-dotplots).
 - [Watkins et al. - "Where Is My Bus? Impact of mobile real-time information on the perceived and actual wait time of transit riders"](https://www.sciencedirect.com/science/article/pii/S0965856411001030) - Experiments in Seattl,e WA showed that riders perceived shorter bus wait times when they had access to real-time info via mobile apps.
 - [Brakewood et al. - “An experiment evaluating the impacts of real-time transit information on bus riders in Tampa, Florida”](https://www.sciencedirect.com/science/article/pii/S0965856414002146) - Controlled experiment in Tampa, FL showed that riders with access to real-time info via mobile apps perceived nearly 2 minute reduction in wait times compared to riders without real-time info.  Riders with real-time info also had decreases in anxiety and frustration and better reception of agency.
 - [Brakewood et al. - "The impact of real-time information on bus ridership in New York City"](https://www.sciencedirect.com/science/article/pii/S0968090X15000297) - Experiment in NYC showed that ridership increased on long routes when real-time info was made available to riders.
@@ -46,3 +54,7 @@ On-line courses, blog posts, and reports related to open transit data.
 ## Community-maintained lists
 - [Vendors Providing GTFS Creation/Maintenance services](https://docs.google.com/spreadsheets/u/1/d/1Gc9mu4BIYC8ORpv2IbbVnT3q8VQ3xkeY7Hz068vT_GQ/pubhtml) - Add new vendors [here](http://goo.gl/forms/YDbPSPmufS).
 - [Entities Providing Transportation Software Development Consulting Services](https://docs.google.com/spreadsheets/u/1/d/1n44CNMCK1vt1nyrsdYz-KD_hYxUMNIm6Me69M6ROBIg/pubhtml) - Add new entities [here](http://goo.gl/forms/cc6kcVERuP).
+
+## Related lists
+- [awesome-europe](https://github.com/GeiserX/awesome-europe#transport-and-mobility) - Curated list of open source projects for the EU / EEA, with a transport and mobility section that overlaps this list (HAFAS, NeTEx, ETCS, SIRI, Transitous, OpenTripPlanner EU deployments).
+
