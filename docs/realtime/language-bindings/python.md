@@ -11,6 +11,12 @@ Provides Python classes generated from the
 Buffer specification.  These classes will allow you to parse a binary Protocol
 Buffer GTFS-realtime data feed into Python objects.
 
+## Breaking Changes
+
+### Version 3.0.0
+
+Version 3.0.0 requires **Python 3.10 or later** and **protobuf 7.34.0 or later**. If you are using an older version of Python or need an older protobuf runtime, please continue using version `2.x`.
+
 ## Add the Dependency
 
 To use the `gtfs-realtime-bindings` classes in your own project, you need to
@@ -18,10 +24,6 @@ first install the module from the
 [PyPI repository](https://pypi.python.org/pypi/gtfs-realtime-bindings).
 
 ```
-# Using easy_install
-easy_install --upgrade gtfs-realtime-bindings
-
-# Using pip
 pip install --upgrade gtfs-realtime-bindings
 ```
 
@@ -39,8 +41,8 @@ feed = gtfs_realtime_pb2.FeedMessage()
 response = requests.get('URL OF YOUR GTFS-REALTIME SOURCE GOES HERE')
 feed.ParseFromString(response.content)
 for entity in feed.entity:
-  if entity.HasField('trip_update'):
-    print(entity.trip_update)
+    if entity.HasField('trip_update'):
+        print(entity.trip_update)
 ```
 
 For more details on the naming conventions for the Python classes generated
