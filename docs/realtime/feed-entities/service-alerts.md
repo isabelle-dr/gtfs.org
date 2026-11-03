@@ -50,6 +50,7 @@ What is the cause of this alert? You may specify one of the following:
 *   Construction
 *   Police activity
 *   Medical emergency
+*   Special Event
 
 ## Effect
 
