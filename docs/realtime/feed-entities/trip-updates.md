@@ -6,7 +6,7 @@
 
 Trip updates represent fluctuations in the timetable. We would expect to receive trip updates for all trips you have scheduled that are realtime-capable. These updates would give a predicted arrival or departure time for stops along the route. Trip updates can also provide for more complex scenarios where trips are canceled or added to the schedule, or even re-routed.
 
-**Reminder:** In [GTFS](https://developers.google.com/transit/gtfs/), a trip is a sequence of two of more stops occurring at a specific time.
+**Reminder:** In [GTFS](https://developers.google.com/transit/gtfs/), a trip is a sequence of two or more stops occurring at a specific time.
 
 There should be **at most** one trip update for each scheduled trip. In case there is no trip update for a scheduled trip, it will be concluded that no realtime data is available for the trip. The data consumer should **not** assume that the trip is running on time.
 
@@ -16,7 +16,7 @@ If a vehicle is serving multiple trips within the same block (for more informati
 
 ## StopTimeUpdate
 
-A trip update consists of one or more updates to vehicle stop times, which are referred to as [StopTimeUpdates](reference.md#message-stoptimeupdate). These can be supplied for past and future stop times. You are allowed, but not required, to drop past stop times.  Producers should not drop a past `StopTimeUpdate` if it refers to a stop with a scheduled arrival time in the future for the given trip (i.e. the vehicle has passed the stop ahead of schedule), as otherwise it will be concluded that there is no update for this stop.
+A trip update consists of one or more updates to vehicle stop times, which are referred to as [StopTimeUpdates](reference.md#message-stoptimeupdate). These can be supplied for past and future stop times. You are allowed, but not required, to drop past stop times, unless the trip is a new or replacement trip not found in the GTFS static.  Producers should not drop a past `StopTimeUpdate` if it refers to a stop with a scheduled arrival time in the future for the given trip (i.e. the vehicle has passed the stop ahead of schedule), as otherwise it will be concluded that there is no update for this stop.
 
 For example, if the following data appears in the GTFS-rt feed:
 
